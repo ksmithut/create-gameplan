@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`gameplan prompts for options 1`] = `
+Array [
+  Object {
+    "choices": undefined,
+    "default": "/Users/ksmithut/Code/ksmithut/create-gameplan/.test-output/test7",
+    "message": "The directory",
+    "name": "directory",
+    "type": "string",
+  },
+  Object {
+    "choices": Array [
+      "foo",
+      "bar",
+      "hello",
+    ],
+    "default": "hello",
+    "message": "choice:",
+    "name": "choice",
+    "type": "list",
+  },
+  Object {
+    "choices": undefined,
+    "default": true,
+    "message": "Yes or no",
+    "name": "boolean",
+    "type": "confirm",
+  },
+]
+`;
