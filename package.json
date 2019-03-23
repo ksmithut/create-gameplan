@@ -21,6 +21,7 @@
   "scripts": {
     "format": "prettier-eslint 'src/**/*.js' --write",
     "lint": "eslint 'src/**/*.js' && prettier-eslint 'src/**/*.js' --list-different",
+    "pretest": "npm run lint",
     "test": "jest"
   },
   "dependencies": {

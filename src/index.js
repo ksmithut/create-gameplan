@@ -12,13 +12,13 @@ const { template, UndefinedTemplateVariable } = require('./lib/template')
 const flatten = require('./lib/flatten')
 
 class InvalidOptionDefinitions extends Error {
-  constructor(errors) {
+  constructor (errors) {
     super(`Invalid option definitions`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_OPTION_DEFINITIONS'
     this.errors = errors.slice()
   }
-  static get OPTIONS_DEFINITION_SCHEMA() {
+  static get OPTIONS_DEFINITION_SCHEMA () {
     return {
       type: 'object',
       additionalProperties: {
@@ -47,7 +47,7 @@ class InvalidOptionDefinitions extends Error {
       }
     }
   }
-  static assert(value) {
+  static assert (value) {
     const ajv = new AJV({ allErrors: true })
     const valid = ajv.validate(
       InvalidOptionDefinitions.OPTIONS_DEFINITION_SCHEMA,
@@ -60,12 +60,12 @@ class InvalidOptionDefinitions extends Error {
 }
 
 class DirectoryNotEmpty extends Error {
-  constructor(directory) {
+  constructor (directory) {
     super(`${directory} is not empty`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'DIRECTORY_NOT_EMPTY'
   }
-  static async assertAsync(directory) {
+  static async assertAsync (directory) {
     if (!(await fsAsync.dirIsEmpty(directory))) {
       throw new DirectoryNotEmpty(directory)
     }
@@ -73,12 +73,12 @@ class DirectoryNotEmpty extends Error {
 }
 
 class InvalidRunMethod extends Error {
-  constructor() {
+  constructor () {
     super(`gameplan module must have a run method`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_RUN_METHOD'
   }
-  static assert(gameplan) {
+  static assert (gameplan) {
     if (typeof gameplan.run !== 'function') {
       throw new InvalidRunMethod()
     }
@@ -86,7 +86,7 @@ class InvalidRunMethod extends Error {
 }
 
 class OutOfBoundsFile extends Error {
-  constructor(directory, filepath) {
+  constructor (directory, filepath) {
     super(`${filepath} does not reside within ${directory}`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'OUT_OF_BOUNDS_FILE'
@@ -95,7 +95,7 @@ class OutOfBoundsFile extends Error {
       filepath
     }
   }
-  static assert(directory, filepath) {
+  static assert (directory, filepath) {
     const isFileInsideDirectory = !path
       .relative(directory, filepath)
       .startsWith('..')
