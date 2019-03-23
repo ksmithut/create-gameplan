@@ -124,7 +124,7 @@ const parseCommandLineArguments = (optionDefinitions, args, repo) => {
     return option
   })
   const parsedOptions = yargsModule(args)
-    .usage(`Usage: $0 ${repo} -- [gameplan-options]`)
+    .usage(`Usage: $0 ${repo} <folder> -- [gameplan-options]`)
     .options(yargsOptions)
     .strict(true)
     .parse()
