@@ -1,6 +1,6 @@
 {
   "name": "create-gameplan",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A CLI to initialize projects from a git repo template",
   "keywords": [
     "template",
