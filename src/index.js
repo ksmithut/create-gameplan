@@ -12,13 +12,13 @@ const { template, UndefinedTemplateVariable } = require('./lib/template')
 const flatten = require('./lib/flatten')
 
 class InvalidOptionDefinitions extends Error {
-  constructor (errors) {
+  constructor(errors) {
     super(`Invalid option definitions`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_OPTION_DEFINITIONS'
     this.errors = errors.slice()
   }
-  static get OPTIONS_DEFINITION_SCHEMA () {
+  static get OPTIONS_DEFINITION_SCHEMA() {
     return {
       type: 'object',
       additionalProperties: {
@@ -47,7 +47,7 @@ class InvalidOptionDefinitions extends Error {
       }
     }
   }
-  static assert (value) {
+  static assert(value) {
     const ajv = new AJV({ allErrors: true })
     const valid = ajv.validate(
       InvalidOptionDefinitions.OPTIONS_DEFINITION_SCHEMA,
@@ -60,12 +60,12 @@ class InvalidOptionDefinitions extends Error {
 }
 
 class DirectoryNotEmpty extends Error {
-  constructor (directory) {
+  constructor(directory) {
     super(`${directory} is not empty`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'DIRECTORY_NOT_EMPTY'
   }
-  static async assertAsync (directory) {
+  static async assertAsync(directory) {
     if (!(await fsAsync.dirIsEmpty(directory))) {
       throw new DirectoryNotEmpty(directory)
     }
@@ -73,20 +73,20 @@ class DirectoryNotEmpty extends Error {
 }
 
 class InvalidRunMethod extends Error {
-  constructor () {
-    super(`stencil module must have a run method`)
+  constructor() {
+    super(`gameplan module must have a run method`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_RUN_METHOD'
   }
-  static assert (stencil) {
-    if (typeof stencil.run !== 'function') {
+  static assert(gameplan) {
+    if (typeof gameplan.run !== 'function') {
       throw new InvalidRunMethod()
     }
   }
 }
 
 class OutOfBoundsFile extends Error {
-  constructor (directory, filepath) {
+  constructor(directory, filepath) {
     super(`${filepath} does not reside within ${directory}`)
     Error.captureStackTrace(this, this.constructor)
     this.code = 'OUT_OF_BOUNDS_FILE'
@@ -95,7 +95,7 @@ class OutOfBoundsFile extends Error {
       filepath
     }
   }
-  static assert (directory, filepath) {
+  static assert(directory, filepath) {
     const isFileInsideDirectory = !path
       .relative(directory, filepath)
       .startsWith('..')
@@ -124,7 +124,7 @@ const parseCommandLineArguments = (optionDefinitions, args, repo) => {
     return option
   })
   const parsedOptions = yargsModule(args)
-    .usage(`Usage: $0 ${repo} -- [stencil-options]`)
+    .usage(`Usage: $0 ${repo} -- [gameplan-options]`)
     .options(yargsOptions)
     .strict(true)
     .parse()
@@ -156,8 +156,8 @@ const promptForOptions = async (optionDefinitions, defaults) => {
   return Object.assign({}, defaults, await optionPrompt(inquirerQuestions))
 }
 
-const runStencil = async (
-  stencil,
+const runGameplan = async (
+  gameplan,
   options,
   sourceDirectory,
   destinationDirectory
@@ -206,7 +206,7 @@ const runStencil = async (
       })
     }
   }
-  await stencil.run({ options, operations })
+  await gameplan.run({ options, operations })
   await todos.reduce(async (prev, todo) => {
     await prev
     await todo()
@@ -223,20 +223,20 @@ const run = async ({
   await fsAsync.mkdir(destinationDirectory, { recursive: true })
   await DirectoryNotEmpty.assertAsync(destinationDirectory)
   const sourceDirectory = await fsAsync.mkdtemp(
-    path.join(temporaryDirectory, 'stencil-')
+    path.join(temporaryDirectory, 'gameplan-')
   )
   try {
     await spawnAsync('git', ['clone', '--depth=1', repo, sourceDirectory])
-    const stencil = require(sourceDirectory)
-    InvalidRunMethod.assert(stencil)
+    const gameplan = require(sourceDirectory)
+    InvalidRunMethod.assert(gameplan)
     const optionDefinitions =
-      typeof stencil.options === 'function'
-        ? stencil.options({ directory: destinationDirectory })
+      typeof gameplan.options === 'function'
+        ? gameplan.options({ directory: destinationDirectory })
         : {}
     InvalidOptionDefinitions.assert(optionDefinitions)
     let options = parseCommandLineArguments(optionDefinitions, args, repo)
     if (prompt) options = await promptForOptions(optionDefinitions, options)
-    await runStencil(stencil, options, sourceDirectory, destinationDirectory)
+    await runGameplan(gameplan, options, sourceDirectory, destinationDirectory)
     return {
       destinationDirectory
     }
