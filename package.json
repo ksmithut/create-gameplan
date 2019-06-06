@@ -26,19 +26,19 @@
   },
   "dependencies": {
     "ajv": "^6.10.0",
-    "inquirer": "^6.2.2",
+    "inquirer": "^6.3.1",
     "rimraf": "^2.6.3",
-    "yargs": "^13.2.2"
+    "yargs": "^13.2.4"
   },
   "devDependencies": {
     "assert-dir-equal": "^1.1.0",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
-    "jest": "^24.5.0",
+    "jest": "^24.8.0",
     "prettier-eslint-cli": "^4.7.1"
   }
 }
