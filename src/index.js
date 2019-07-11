@@ -18,6 +18,7 @@ class InvalidOptionDefinitions extends Error {
     this.code = 'INVALID_OPTION_DEFINITIONS'
     this.errors = errors.slice()
   }
+
   static get OPTIONS_DEFINITION_SCHEMA () {
     return {
       type: 'object',
@@ -47,6 +48,7 @@ class InvalidOptionDefinitions extends Error {
       }
     }
   }
+
   static assert (value) {
     const ajv = new AJV({ allErrors: true })
     const valid = ajv.validate(
@@ -65,6 +67,7 @@ class DirectoryNotEmpty extends Error {
     Error.captureStackTrace(this, this.constructor)
     this.code = 'DIRECTORY_NOT_EMPTY'
   }
+
   static async assertAsync (directory) {
     if (!(await fsAsync.dirIsEmpty(directory))) {
       throw new DirectoryNotEmpty(directory)
@@ -78,6 +81,7 @@ class InvalidRunMethod extends Error {
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_RUN_METHOD'
   }
+
   static assert (gameplan) {
     if (typeof gameplan.run !== 'function') {
       throw new InvalidRunMethod()
@@ -95,6 +99,7 @@ class OutOfBoundsFile extends Error {
       filepath
     }
   }
+
   static assert (directory, filepath) {
     const isFileInsideDirectory = !path
       .relative(directory, filepath)
@@ -240,8 +245,6 @@ const run = async ({
     return {
       destinationDirectory
     }
-  } catch (err) {
-    throw err
   } finally {
     await fsAsync.rmdirRecursive(sourceDirectory)
   }
