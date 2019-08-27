@@ -13,7 +13,7 @@ const flatten = require('./lib/flatten')
 
 class InvalidOptionDefinitions extends Error {
   constructor (errors) {
-    super(`Invalid option definitions`)
+    super('Invalid option definitions')
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_OPTION_DEFINITIONS'
     this.errors = errors.slice()
@@ -77,7 +77,7 @@ class DirectoryNotEmpty extends Error {
 
 class InvalidRunMethod extends Error {
   constructor () {
-    super(`gameplan module must have a run method`)
+    super('gameplan module must have a run method')
     Error.captureStackTrace(this, this.constructor)
     this.code = 'INVALID_RUN_METHOD'
   }
@@ -180,7 +180,7 @@ const runGameplan = async (
     },
     template: (fromPath, toPath, variables) => {
       if (!isObject(variables)) {
-        throw new TypeError(`template variables must be an object`)
+        throw new TypeError('template variables must be an object')
       }
       const from = resolvePath(sourceDirectory, fromPath)
       const to = resolvePath(destinationDirectory, toPath)

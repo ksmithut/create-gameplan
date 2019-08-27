@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-const pkgName = `gameplan`
+const pkgName = 'gameplan'
 
 process.title = pkgName
 
