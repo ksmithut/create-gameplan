@@ -195,7 +195,7 @@ const runGameplan = async (
     json: (fromObject, toPath) => {
       const to = resolvePath(destinationDirectory, toPath)
       const dirnameTo = path.dirname(to)
-      const contents = JSON.stringify(fromObject, null, 2)
+      const contents = JSON.stringify(fromObject, null, 2) + '\n'
       todos.push(async () => {
         await fsAsync.mkdir(dirnameTo, { recursive: true })
         await fsAsync.writeFile(to, contents, { mode: 0o644 })

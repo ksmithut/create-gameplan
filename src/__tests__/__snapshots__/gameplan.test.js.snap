@@ -4,7 +4,7 @@ exports[`gameplan prompts for options 1`] = `
 Array [
   Object {
     "choices": undefined,
-    "default": "/home/ksmithut/Code/ksmithut/create-gameplan/.test-output/test7",
+    "default": "/Users/ksmithut/Code/github.com/ksmithut/create-gameplan/.test-output/test7",
     "message": "The directory",
     "name": "directory",
     "type": "string",
