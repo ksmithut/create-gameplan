@@ -22,19 +22,19 @@ class SpawnError extends Error {
 /**
  * @param {string} command
  * @param {string[]} args
- * @param {{ stdio?: string, cwd?: string }?} options
+ * @param {import('child_process').SpawnOptions} [options]
  */
 const spawnAsync = async (command, args, options) => {
   return new Promise((resolve, reject) => {
-    let stdout = []
-    let stderr = []
+    const stdout = []
+    const stderr = []
     const spawnedProcess = spawn(command, args, options)
       .on('error', err => reject(err))
       .on('close', code => {
-        stdout = Buffer.concat(stdout)
-        stderr = Buffer.concat(stderr)
+        const stdoutBuffer = Buffer.concat(stdout)
+        const stderrBuffer = Buffer.concat(stderr)
         code === 0
-          ? resolve({ stdout, stderr })
+          ? resolve({ stdout: stdoutBuffer, stderr: stderrBuffer })
           : reject(new SpawnError(command, args, options, code, stdout, stderr))
       })
     if (spawnedProcess.stdout) {

@@ -4,7 +4,8 @@ const path = require('path')
 const yargsModule = require('yargs/yargs')
 const AJV = require('ajv')
 const inquirer = require('inquirer')
-const fsAsync = require('./lib/fs-async')
+const fs = require('fs-extra')
+const { dirIsEmpty } = require('./lib/dir-is-empty')
 const { spawnAsync, SpawnError } = require('./lib/spawn-async')
 const objectMap = require('./lib/object-map')
 const isObject = require('./lib/is-object')
@@ -69,7 +70,7 @@ class DirectoryNotEmpty extends Error {
   }
 
   static async assertAsync (directory) {
-    if (!(await fsAsync.dirIsEmpty(directory))) {
+    if (!(await dirIsEmpty(directory))) {
       throw new DirectoryNotEmpty(directory)
     }
   }
@@ -174,8 +175,10 @@ const runGameplan = async (
       const to = resolvePath(destinationDirectory, toPath)
       const dirnameTo = path.dirname(to)
       todos.push(async () => {
-        await fsAsync.mkdir(dirnameTo, { recursive: true })
-        await fsAsync.copyFile(from, to)
+        await fs.mkdirp(dirnameTo)
+        await fs.copy(from, to, {
+          recursive: true
+        })
       })
     },
     template: (fromPath, toPath, variables) => {
@@ -186,19 +189,18 @@ const runGameplan = async (
       const to = resolvePath(destinationDirectory, toPath)
       const dirnameTo = path.dirname(to)
       todos.push(async () => {
-        await fsAsync.mkdir(dirnameTo, { recursive: true })
-        const contents = await fsAsync.readFile(from, 'utf8')
+        await fs.mkdirp(dirnameTo)
+        const contents = await fs.readFile(from, 'utf8')
         const replacedContents = template(contents, variables)
-        await fsAsync.writeFile(to, replacedContents, { mode: 0o644 })
+        await fs.writeFile(to, replacedContents, { mode: 0o644 })
       })
     },
     json: (fromObject, toPath) => {
       const to = resolvePath(destinationDirectory, toPath)
       const dirnameTo = path.dirname(to)
-      const contents = JSON.stringify(fromObject, null, 2) + '\n'
       todos.push(async () => {
-        await fsAsync.mkdir(dirnameTo, { recursive: true })
-        await fsAsync.writeFile(to, contents, { mode: 0o644 })
+        await fs.mkdirp(dirnameTo)
+        await fs.writeJSON(to, fromObject, { mode: 0o644 })
       })
     },
     spawn: (command, ...args) => {
@@ -225,9 +227,9 @@ const run = async ({
   prompt = false,
   args = []
 }) => {
-  await fsAsync.mkdir(destinationDirectory, { recursive: true })
+  await fs.mkdirp(destinationDirectory)
   await DirectoryNotEmpty.assertAsync(destinationDirectory)
-  const sourceDirectory = await fsAsync.mkdtemp(
+  const sourceDirectory = await fs.mkdtemp(
     path.join(temporaryDirectory, 'gameplan-')
   )
   try {
@@ -246,7 +248,7 @@ const run = async ({
       destinationDirectory
     }
   } finally {
-    await fsAsync.rmdirRecursive(sourceDirectory)
+    await fs.remove(sourceDirectory)
   }
 }
 
