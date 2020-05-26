@@ -200,7 +200,7 @@ const runGameplan = async (
       const dirnameTo = path.dirname(to)
       todos.push(async () => {
         await fs.mkdirp(dirnameTo)
-        await fs.writeJSON(to, fromObject, { mode: 0o644 })
+        await fs.writeJSON(to, fromObject, { mode: 0o644, spaces: 2 })
       })
     },
     spawn: (command, ...args) => {
