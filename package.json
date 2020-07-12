@@ -27,17 +27,16 @@
     "test": "jest"
   },
   "dependencies": {
-    "ajv": "^6.12.2",
-    "fs-extra": "^9.0.0",
-    "inquirer": "^7.1.0",
-    "yargs": "^15.3.1",
-    "yup": "^0.29.0"
+    "ajv": "^6.12.3",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.3.1",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.3",
+    "@types/jest": "^26.0.4",
     "assert-dir-equal": "^1.1.0",
-    "jest": "^26.0.1",
-    "prettier-standard": "^16.3.0",
+    "jest": "^26.1.0",
+    "prettier-standard": "^16.4.1",
     "standard": "^14.3.4"
   }
 }
